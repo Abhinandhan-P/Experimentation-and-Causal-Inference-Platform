@@ -4,6 +4,45 @@ A Python platform for A/B testing, causal inference, and statistical analysis, f
 
 ---
 
+## Architecture
+
+```mermaid
+graph TD
+    Client["Client / Web Browser / API Consumer"] -->|HTTP / JSON| API["FastAPI Backend Service (`src/api.py`)"]
+    Client -->|Browser UI| Dashboard["Web Dashboard (`src/static/index.html`, `dashboard.js`)"]
+    Dashboard -->|REST Requests| API
+
+    subgraph Service Layer ["FastAPI Routing & Ingestion"]
+        API
+        DM["Dataset Manager (`src/dataset_manager.py`)"]
+        API --> DM
+    end
+
+    subgraph Analytics Engines ["Core Statistical & Causal Engines"]
+        SE["Statistics Engine (`src/statistics_engine.py`)<br/>- Two-Proportion Z-Test<br/>- Welch's t-Test<br/>- Chi-Square Independence<br/>- Group-Sequential Testing (O'Brien-Fleming)"]
+        BE["Bayesian Engine (`src/bayesian_engine.py`)<br/>- Beta-Binomial Conjugate Model<br/>- Monte Carlo Credible Intervals<br/>- P(B > A) & Practical Thresholds"]
+        CE["Causal Engine (`src/causal_engine.py`)<br/>- Difference-in-Differences (DiD)<br/>- Propensity Score Estimation<br/>- Inverse Probability Weighting (IPTW)<br/>- Regression-Adjusted ATE<br/>- Sensitivity Analysis (Rosenbaum bounds)"]
+        MC["Multiple Comparisons (`src/multiple_comparisons.py`)<br/>- Bonferroni Correction<br/>- Benjamini-Hochberg (FDR)"]
+    end
+
+    subgraph Reporting & Storage ["Storage & Export Subsystem"]
+        FS[("In-Memory & Streaming Storage<br/>Bounded CSV / Hillstrom Benchmark")]
+        REP["Reporting & Export (`src/experiment_report.py`, `src/report_export.py`)<br/>- Terminal Summaries<br/>- CSV / TXT Exports"]
+    end
+
+    API --> SE
+    API --> BE
+    API --> CE
+    API --> MC
+
+    DM --> FS
+    CE --> FS
+    SE --> REP
+    MC --> REP
+```
+
+---
+
 ## Features
 
 - **Conversion Rate Comparison Engine**: Two-proportion z-test, Wilson confidence intervals, and p-value calculations for binary metrics.
