@@ -58,8 +58,15 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Mount static files directory for the frontend dashboard
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+# Mount static files directory for the frontend dashboard.
+# Wrapped in try/except so the API remains fully operational in
+# serverless environments (e.g. Vercel) where the static directory
+# may not be present in the read-only filesystem bundle.
+try:
+    if STATIC_DIR.is_dir():
+        app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+except Exception:
+    pass
 
 
 @app.exception_handler(ValueError)
