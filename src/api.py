@@ -21,31 +21,90 @@ if str(SRC_DIR) not in sys.path:
 
 STATIC_DIR = SRC_DIR / "static"
 
-from statistics_engine import (
-    compare_conversion_rates,
-    calculate_sample_size,
-    two_sample_ttest,
-    chi_square_test,
-    sequential_conversion_test,
-)
-from bayesian_engine import bayesian_ab_test
-from causal_engine import (
-    estimate_unadjusted_ate_with_uncertainty,
-    estimate_regression_adjusted_ate,
-    estimate_propensity_scores,
-    estimate_iptw_ate,
-    estimate_difference_in_differences,
-    run_causal_sensitivity_analysis,
-    analyze_unmeasured_confounding_sensitivity,
-)
+# ---------------------------------------------------------------------------
+# Lazy imports: scipy / statsmodels / pandas / numpy are heavy C-extension
+# packages that cause Vercel cold-start timeouts when imported at module load.
+# They are imported the first time any route handler is invoked instead.
+# ---------------------------------------------------------------------------
+_engines_loaded = False
+compare_conversion_rates = None
+calculate_sample_size = None
+two_sample_ttest = None
+chi_square_test = None
+sequential_conversion_test = None
+bayesian_ab_test = None
+estimate_unadjusted_ate_with_uncertainty = None
+estimate_regression_adjusted_ate = None
+estimate_propensity_scores = None
+estimate_iptw_ate = None
+estimate_difference_in_differences = None
+run_causal_sensitivity_analysis = None
+analyze_unmeasured_confounding_sensitivity = None
+np = None  # numpy, loaded lazily
+pd = None  # pandas, loaded lazily
+
+
 from dataset_manager import (
     DatasetIngestionResponse,
     default_dataset_manager,
     MISSING_TOKENS,
 )
 from urllib.parse import unquote
-import numpy as np
-import pandas as pd
+
+
+def _load_engines() -> None:
+    """Import heavy scientific engines on first request (avoids cold-start timeout on Vercel)."""
+    global _engines_loaded
+    global compare_conversion_rates, calculate_sample_size, two_sample_ttest
+    global chi_square_test, sequential_conversion_test
+    global bayesian_ab_test
+    global estimate_unadjusted_ate_with_uncertainty, estimate_regression_adjusted_ate
+    global estimate_propensity_scores, estimate_iptw_ate, estimate_difference_in_differences
+    global run_causal_sensitivity_analysis, analyze_unmeasured_confounding_sensitivity
+    global np, pd
+
+    if _engines_loaded:
+        return
+
+    import numpy as _np
+    import pandas as _pd
+    np = _np
+    pd = _pd
+
+    from statistics_engine import (
+        compare_conversion_rates as _cmp,
+        calculate_sample_size as _css,
+        two_sample_ttest as _ttest,
+        chi_square_test as _chi,
+        sequential_conversion_test as _seq,
+    )
+    compare_conversion_rates = _cmp
+    calculate_sample_size = _css
+    two_sample_ttest = _ttest
+    chi_square_test = _chi
+    sequential_conversion_test = _seq
+
+    from bayesian_engine import bayesian_ab_test as _bayes
+    bayesian_ab_test = _bayes
+
+    from causal_engine import (
+        estimate_unadjusted_ate_with_uncertainty as _uate,
+        estimate_regression_adjusted_ate as _rate,
+        estimate_propensity_scores as _ps,
+        estimate_iptw_ate as _iptw,
+        estimate_difference_in_differences as _did,
+        run_causal_sensitivity_analysis as _sens,
+        analyze_unmeasured_confounding_sensitivity as _umcs,
+    )
+    estimate_unadjusted_ate_with_uncertainty = _uate
+    estimate_regression_adjusted_ate = _rate
+    estimate_propensity_scores = _ps
+    estimate_iptw_ate = _iptw
+    estimate_difference_in_differences = _did
+    run_causal_sensitivity_analysis = _sens
+    analyze_unmeasured_confounding_sensitivity = _umcs
+
+    _engines_loaded = True
 
 app = FastAPI(
     title="Experimentation and Causal Inference Platform API",
@@ -69,6 +128,13 @@ except Exception:
     pass
 
 
+@app.middleware("http")
+async def lazy_load_engines_middleware(request: Request, call_next):
+    """Trigger lazy engine loading on the first real API request."""
+    _load_engines()
+    return await call_next(request)
+
+
 @app.exception_handler(ValueError)
 async def value_error_handler(request: Request, exc: ValueError) -> JSONResponse:
     """Handle ValueErrors cleanly without exposing internal tracebacks."""
@@ -80,14 +146,15 @@ async def value_error_handler(request: Request, exc: ValueError) -> JSONResponse
 
 def _sanitize_for_json(val: Any) -> Any:
     """Recursively convert NumPy scalars and non-native types for clean JSON serialization."""
-    if isinstance(val, (np.integer,)):
-        return int(val)
-    if isinstance(val, (np.floating,)):
-        return float(val)
-    if isinstance(val, (np.bool_,)):
-        return bool(val)
-    if isinstance(val, (np.ndarray,)):
-        return val.tolist()
+    if np is not None:
+        if isinstance(val, np.integer):
+            return int(val)
+        if isinstance(val, np.floating):
+            return float(val)
+        if isinstance(val, np.bool_):
+            return bool(val)
+        if isinstance(val, np.ndarray):
+            return val.tolist()
     if isinstance(val, dict):
         return {k: _sanitize_for_json(v) for k, v in val.items()}
     if isinstance(val, list):
@@ -392,6 +459,7 @@ async def compare_experiment_groups(
     - 95% confidence interval for difference
     - Statistical significance at alpha = 0.05
     """
+    _load_engines()
     try:
         results = compare_conversion_rates(
             conversions_a=payload.group_a.conversions,
