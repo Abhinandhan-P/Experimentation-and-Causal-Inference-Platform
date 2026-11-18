@@ -1,0 +1,883 @@
+/* ==========================================================================
+   Experimentation and Causal Inference Platform - Dashboard CSS
+   Design System: Charcoal & Sage Green Academic Theme
+   Palette: Primary Charcoal (#29352E), Secondary Charcoal (#374139),
+            Sage Accent (#87977B), Deep Sage (#52634D), Soft Sage (#E3E8DE),
+            Warm Neutral (#F4F3ED), White (#FFFFFF), Primary Text (#252B27),
+            Secondary Text (#626A62), Borders (#D7DDD3).
+   ========================================================================== */
+
+:root {
+    /* --- Base Color Palette --- */
+    --primary-charcoal: #29352E;
+    --secondary-charcoal: #374139;
+    --sage-accent: #87977B;
+    --deep-sage: #52634D;
+    --soft-sage-surface: #E3E8DE;
+    --warm-neutral-bg: #F4F3ED;
+    --white-surface: #FFFFFF;
+    --text-primary: #252B27;
+    --text-secondary: #626A62;
+    --text-muted: #7E867E;
+    --border-color: #D7DDD3;
+    --border-dark: #B8C2B3;
+
+    /* --- Status Colors --- */
+    --color-success: #3F6B4F;
+    --color-warning: #8A652C;
+    --color-error: #A3443D;
+
+    /* --- Semantic Surfaces & Aliases --- */
+    --bg-canvas: var(--warm-neutral-bg);
+    --bg-surface: var(--white-surface);
+    --bg-alt: var(--warm-neutral-bg);
+    --accent-sage: var(--deep-sage);
+    --accent-navy: var(--deep-sage); /* Preserved for backward test compatibility */
+
+    /* --- Health Badge Color Tokens --- */
+    --health-healthy-text: #2A5438;
+    --health-healthy-bg: #E3E8DE;
+    --health-healthy-border: #87977B;
+    --health-healthy-dot: #3F6B4F;
+
+    --health-unhealthy-text: #822722;
+    --health-unhealthy-bg: #FAECEB;
+    --health-unhealthy-border: #DFA9A5;
+    --health-unhealthy-dot: #A3443D;
+
+    --health-checking-text: #6B4E1E;
+    --health-checking-bg: #FBF4E7;
+    --health-checking-border: #DFCEB0;
+    --health-checking-dot: #8A652C;
+
+    /* --- Typography & Geometry --- */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --spacing-unit: 8px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background-color: var(--bg-canvas);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- Application Header (Charcoal Surface) --- */
+.app-header {
+    background-color: var(--primary-charcoal);
+    border-bottom: 1px solid var(--secondary-charcoal);
+    padding: 16px 24px;
+    color: #FFFFFF;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.brand-block h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.01em;
+}
+
+.brand-block p {
+    font-size: 13px;
+    color: var(--soft-sage-surface);
+    margin-top: 2px;
+}
+
+/* --- API Health Status Badge --- */
+.health-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--secondary-charcoal);
+    background-color: var(--secondary-charcoal);
+    color: var(--soft-sage-surface);
+    transition: none;
+}
+
+.health-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+}
+
+.health-badge.health-healthy {
+    background-color: #202C24;
+    border-color: var(--deep-sage);
+    color: #D3ECD7;
+}
+
+.health-badge.health-healthy .health-dot {
+    background-color: #4CAF50;
+}
+
+.health-badge.health-unhealthy {
+    background-color: #381E1C;
+    border-color: var(--color-error);
+    color: #FCDAD7;
+}
+
+.health-badge.health-unhealthy .health-dot {
+    background-color: #E57373;
+}
+
+.health-badge.health-checking {
+    background-color: #352B1C;
+    border-color: var(--color-warning);
+    color: #F8E8C9;
+}
+
+.health-badge.health-checking .health-dot {
+    background-color: #F59E0B;
+}
+
+/* --- Main Workspace Layout --- */
+.dashboard-workspace {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 24px;
+}
+
+.workspace-heading {
+    margin-bottom: 20px;
+}
+
+.workspace-heading h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.workspace-heading p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* --- Informational Notice Banner (Soft Sage Surface) --- */
+.info-banner {
+    background-color: var(--soft-sage-surface);
+    border: 1px solid var(--sage-accent);
+    border-left: 4px solid var(--deep-sage);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--primary-charcoal);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.info-banner strong {
+    font-weight: 600;
+    color: var(--deep-sage);
+}
+
+/* --- Section Styling (White Surface with Thin Sage Borders) --- */
+.section-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.section-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.section-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.section-header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* --- Dataset Ingestion Controls Panel --- */
+.ingestion-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.upload-box {
+    flex: 1 1 100%;
+    max-width: 520px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    background-color: var(--warm-neutral-bg);
+}
+
+.uploaded-file-info {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background-color: var(--soft-sage-surface);
+    border: 1px solid var(--sage-accent);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--primary-charcoal);
+}
+
+.upload-box h4, .benchmark-box h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.upload-box p, .benchmark-box p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.file-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.file-input {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.file-meta-display {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.benchmark-box {
+    flex: 1 1 360px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    background-color: var(--white-surface);
+}
+
+/* --- Buttons (Sage & Charcoal Palette) --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--deep-sage);
+    color: #FFFFFF;
+    border-color: var(--deep-sage);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--secondary-charcoal);
+    border-color: var(--secondary-charcoal);
+}
+
+.btn-primary:focus-visible {
+    outline: 2px solid var(--sage-accent);
+    outline-offset: 2px;
+}
+
+.btn-secondary {
+    background-color: var(--white-surface);
+    color: var(--text-primary);
+    border-color: var(--border-dark);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--soft-sage-surface);
+    border-color: var(--deep-sage);
+}
+
+.btn-secondary:focus-visible {
+    outline: 2px solid var(--sage-accent);
+    outline-offset: 2px;
+}
+
+.btn:disabled {
+    background-color: var(--soft-sage-surface);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* --- Status & Alert Messages (Earthy Status Accents) --- */
+.status-indicator {
+    display: none;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.status-indicator.status-visible {
+    display: block;
+}
+
+.status-info {
+    background-color: var(--soft-sage-surface);
+    border: 1px solid var(--sage-accent);
+    color: var(--primary-charcoal);
+}
+
+.status-success {
+    background-color: #EBF3ED;
+    border: 1px solid var(--color-success);
+    color: var(--color-success);
+}
+
+.status-error {
+    background-color: #FAECEB;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+
+/* --- Dataset Overview KPI Badges --- */
+.dataset-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.overview-kpi-card {
+    background-color: var(--warm-neutral-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+}
+
+.kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.kpi-value {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-charcoal);
+}
+
+.kpi-subtext {
+    font-size: 11px;
+    color: var(--deep-sage);
+    margin-top: 2px;
+}
+
+/* --- Data & Schema Tables --- */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    background-color: var(--white-surface);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.data-table th {
+    background-color: var(--soft-sage-surface);
+    color: var(--primary-charcoal);
+    font-weight: 600;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+}
+
+.data-table th:last-child {
+    border-right: none;
+}
+
+.data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.data-table td:last-child {
+    border-right: none;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #FAF9F5;
+}
+
+.data-table tbody tr:hover {
+    background-color: #EDECE6;
+}
+
+/* --- Type Pill Badges (Earth-Tone Palette) --- */
+.type-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+}
+
+.type-boolean {
+    background-color: #E3E8DE;
+    color: var(--color-success);
+    border: 1px solid var(--sage-accent);
+}
+
+.type-integer {
+    background-color: #E3E8DE;
+    color: var(--primary-charcoal);
+    border: 1px solid var(--deep-sage);
+}
+
+.type-numeric {
+    background-color: var(--warm-neutral-bg);
+    color: var(--deep-sage);
+    border: 1px solid var(--sage-accent);
+}
+
+.type-categorical {
+    background-color: var(--warm-neutral-bg);
+    color: var(--secondary-charcoal);
+    border: 1px solid var(--border-color);
+}
+
+.type-unknown {
+    background-color: #FAECEB;
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+}
+
+.table-footnote {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-top: 4px;
+}
+
+/* --- Causal Methods Grid --- */
+.methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.method-card {
+    background-color: var(--white-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+}
+
+.method-card:hover {
+    border-color: var(--sage-accent);
+}
+
+.method-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* --- Dataset Initial State (Empty State) --- */
+.empty-state-box {
+    background-color: var(--warm-neutral-bg);
+    border: 1px dashed var(--border-dark);
+    border-radius: var(--radius-sm);
+    padding: 32px 20px;
+    text-align: center;
+}
+
+.empty-state-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.empty-state-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.empty-state-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--deep-sage);
+    margin-top: 12px;
+}
+
+/* --- Dashboard Footer (Charcoal Surface) --- */
+.dashboard-footer {
+    border-top: 1px solid var(--secondary-charcoal);
+    padding: 20px 24px;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--soft-sage-surface);
+    background-color: var(--primary-charcoal);
+}
+
+.dashboard-footer a {
+    color: var(--sage-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.dashboard-footer a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+/* --- Causal Analysis Form & Results Styling --- */
+.active-dataset-meta-box {
+    background-color: var(--soft-sage-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-primary);
+    margin-bottom: 18px;
+}
+
+.active-dataset-meta-box .meta-item strong {
+    color: var(--primary-charcoal);
+}
+
+.active-dataset-meta-box code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background-color: var(--white-surface);
+    padding: 2px 5px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.analysis-form {
+    background-color: var(--white-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+}
+
+.form-row-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.form-group .required {
+    color: var(--color-error);
+}
+
+.form-select, .form-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background-color: var(--white-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.form-select:focus, .form-input:focus {
+    border-color: var(--deep-sage);
+    outline: 2px solid var(--sage-accent);
+    outline-offset: 1px;
+}
+
+.form-select:disabled, .form-input:disabled {
+    background-color: var(--soft-sage-surface);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.field-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+.form-checkbox-row {
+    margin: 14px 0 18px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    accent-color: var(--deep-sage);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.form-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+/* Results Display Cards */
+.results-header-block {
+    margin-bottom: 14px;
+}
+
+.accounting-card {
+    background-color: var(--warm-neutral-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.accounting-card strong {
+    color: var(--text-primary);
+}
+
+.results-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.res-kpi-card {
+    background-color: var(--white-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+}
+
+.res-kpi-card.highlight-card {
+    border-left: 4px solid var(--deep-sage);
+}
+
+.res-kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.res-kpi-val {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-charcoal);
+}
+
+.res-kpi-sub {
+    font-size: 11px;
+    color: var(--deep-sage);
+    margin-top: 2px;
+}
+
+.interpretation-block, .assumptions-block {
+    background-color: var(--warm-neutral-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 12px;
+}
+
+.interpretation-block h5, .assumptions-block h5 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-charcoal);
+    margin-bottom: 6px;
+}
+
+.interpretation-block p, .assumptions-block p {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* --- Confounder Selection Grid (Stage 7.4B) --- */
+.confounders-checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: var(--warm-neutral-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    margin-top: 4px;
+}
+
+.confounder-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--white-surface);
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.confounder-checkbox-item:hover {
+    border-color: var(--sage-accent);
+}
+
+.confounder-checkbox-item input[type="checkbox"] {
+    accent-color: var(--deep-sage);
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+}
+
+.confounder-checkbox-item.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background-color: var(--warm-neutral-bg);
+    border-color: var(--border-color);
+}
+
+.confounder-checkbox-item.disabled input[type="checkbox"] {
+    cursor: not-allowed;
+}
+
+.confounder-checkbox-item .col-type-tag {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    margin-left: auto;
+    background-color: var(--warm-neutral-bg);
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .methods-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-workspace {
+        padding: 0 16px;
+    }
+
+    .ingestion-panel {
+        flex-direction: column;
+    }
+
+    .upload-box, .benchmark-box {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}
